@@ -1,0 +1,237 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "captain hook",
+            "intents": [
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "MovieSearchIntent",
+                    "slots": [
+                        {
+                            "name": "term",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{term}"
+                            ]
+                        },
+                        {
+                            "name": "movie",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{movie}"
+                            ]
+                        },
+                        {
+                            "name": "quality",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{quality}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "download a movie"
+                    ]
+                },
+                {
+                    "name": "TVShowSearchIntent",
+                    "slots": [
+                        {
+                            "name": "term",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{term}"
+                            ]
+                        },
+                        {
+                            "name": "tvshow",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{tvshow}"
+                            ]
+                        },
+                        {
+                            "name": "quality",
+                            "type": "AMAZON.SearchQuery",
+                            "samples": [
+                                "{quality}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "download a tv show",
+                        "download a show",
+                        "download a series",
+                        "download a serie"
+                    ]
+                }
+            ],
+            "types": []
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "MovieSearchIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "term",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1280267383871.773159752400"
+                            }
+                        },
+                        {
+                            "name": "movie",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.726657153746.1148107896059"
+                            }
+                        },
+                        {
+                            "name": "quality",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1280267383871.183618235329"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "name": "TVShowSearchIntent",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "term",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1019527705957.1186486424551"
+                            }
+                        },
+                        {
+                            "name": "tvshow",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1019527705957.1519487916221"
+                            }
+                        },
+                        {
+                            "name": "quality",
+                            "type": "AMAZON.SearchQuery",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1019527705957.1413018283312"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "SKILL_RESPONSE"
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1011286683834.1427685062292",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which movie you want to download?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What's the title of the movie?"
+                    },
+                    {
+                        "type": "PlainText",
+                        "value": "What movie are you looking for?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.726657153746.1148107896059",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What movie you want to download?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1280267383871.183618235329",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What quality do you want?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1280267383871.773159752400",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What movie you want to download?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1019527705957.1186486424551",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Which tv show you want to download?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1019527705957.1519487916221",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What's the title of the tv show?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1019527705957.1413018283312",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "What quality do you want?"
+                    }
+                ]
+            }
+        ]
+    }
+}

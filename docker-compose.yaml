@@ -28,8 +28,6 @@ services:
       - "--all"
       - "--config"
       - "/etc/ngrok.yml"
-    ports:
-      - "4040:4040"
     environment:
       - NGROK_AUTHTOKEN=your_ngrok_authtoken
     volumes:

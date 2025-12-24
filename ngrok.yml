@@ -1,5 +1,5 @@
 version: "2"
-authtoken: your_ngrok_authtoken
+authtoken: 2B85INZMzDjahVKYTmrty9XiEKy_jzCJ9Rdaaq8fjn6iLpGa
 
 tunnels:
   alexa-skill:

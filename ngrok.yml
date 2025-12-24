@@ -1,0 +1,8 @@
+version: "2"
+authtoken: your_ngrok_authtoken
+
+tunnels:
+  alexa-skill:
+    proto: http
+    addr: arr-alexa-skill:4040
+    inspect: true

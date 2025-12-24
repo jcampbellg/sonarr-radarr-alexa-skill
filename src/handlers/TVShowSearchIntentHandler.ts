@@ -1,5 +1,5 @@
-import { movieAddToLibrary, MovieItem, movieIsDownloading, movieTriggerDownload } from '@/utils/radarr'
-import { TVItem, tvShowListQualities, tvShowLookup } from '@/utils/sonarr'
+import { NO_INTENT, YES_INTENT } from '@/constants'
+import { TVItem, tvShowAddToLibrary, tvShowGet, tvShowIsDownloading, tvShowListQualities, tvShowLookup, tvShowTriggerDownload } from '@/utils/sonarr'
 import { HandlerInput, RequestHandler } from 'ask-sdk-core'
 import { IntentRequest } from 'ask-sdk-model'
 
@@ -26,14 +26,15 @@ const TVShowSearchIntentHandler: RequestHandler = {
     const tvShowToDownload = session.tvshow as TVItem
 
     if (!!tvShowToDownload.id) {
-      if (tvShowToDownload.movieFileId) {
+      const { statistics } = await tvShowGet(tvShowToDownload)
+      if (statistics.percentOfEpisodes === 100) {
         return handlerInput.responseBuilder
-          .speak(`${tvShowToDownload.title} is already in your library.`)
+          .speak(`All episodes of ${tvShowToDownload.title} are already in your library.`)
           .withShouldEndSession(true)
           .getResponse()
       }
 
-      const isDownloading = await movieIsDownloading(tvShowToDownload)
+      const isDownloading = await tvShowIsDownloading(tvShowToDownload)
   
       if (isDownloading) {
         return handlerInput.responseBuilder
@@ -42,12 +43,12 @@ const TVShowSearchIntentHandler: RequestHandler = {
         .getResponse()
       }
 
-      await movieTriggerDownload(tvShowToDownload)
+      await tvShowTriggerDownload(tvShowToDownload)
     }
 
     // Add Movie to Radarr
     const qualityId = parseInt((request.intent.slots?.quality.value || '1'), 10)
-    await movieAddToLibrary(tvShowToDownload, qualityId)
+    await tvShowAddToLibrary(tvShowToDownload, qualityId)
 
     return handlerInput.responseBuilder
       .speak(`Downloading ${tvShowToDownload.title} to your library.`)
@@ -89,12 +90,20 @@ async function IN_PROGRESS(handlerInput: HandlerInput) {
 
   const movieSlot = intent.slots?.movie.value || ''
   
-  if (!movieSlot || ['no', 'nah', 'nope', 'negative'].includes(movieSlot.toLowerCase())) {
+  if (!movieSlot || NO_INTENT.includes(movieSlot.toLowerCase())) {
     session.cursor = !movieSlot ? 0 : session.cursor + 1
 
     handlerInput.attributesManager.setSessionAttributes(session)
     return handlerInput.responseBuilder
       .speak(`Did you mean ${session.results[session.cursor].title}?`)
+      .addElicitSlotDirective('tvshow')
+      .getResponse()
+  }
+
+  if (!YES_INTENT.includes(movieSlot.toLowerCase())) {
+    handlerInput.attributesManager.setSessionAttributes(session)
+    return handlerInput.responseBuilder
+      .speak(`Please answer yes or no. Did you mean ${session.results[session.cursor].title}?`)
       .addElicitSlotDirective('tvshow')
       .getResponse()
   }

@@ -66,8 +66,8 @@ export async function tvShowAddToLibrary(tvShow: TVItem, quality: number): Promi
   return res.data as TVItem
 }
 
-export async function tvShowGet(id: number): Promise<TVItem> {
-  const res = await sonarr.get(`/api/v3/series/${id}`)
+export async function tvShowGet(tvShow: TVItem): Promise<TVItem> {
+  const res = await sonarr.get(`/api/v3/series/${tvShow.id}`)
 
   return res.data as TVItem
 }
@@ -76,4 +76,23 @@ export async function tvShowListQualities() {
   const data = await sonarr.get(`/api/v3/qualityprofile`)
 
   return data.data as TVShowQuality[]
+}
+
+export async function tvShowIsDownloading(tvShow: TVItem) {
+  const data = await sonarr.get(`/api/v3/queue/details`, {
+    params: {
+      seriesId: tvShow.id
+    }
+  })
+
+  return data.data.length > 0
+}
+
+export async function tvShowTriggerDownload(tvShow: TVItem) {
+  const data = await sonarr.post(`/api/v3/command`, {
+    name: 'SeriesSearch',
+    seriesId: tvShow.id
+  })
+
+  return data.data
 }

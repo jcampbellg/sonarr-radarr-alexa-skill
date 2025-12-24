@@ -1,3 +1,4 @@
+import { NO_INTENT, YES_INTENT } from '@/constants'
 import { movieAddToLibrary, MovieItem, movieLookup, movieListQualities, movieIsDownloading, movieTriggerDownload } from '@/utils/radarr'
 import { HandlerInput, RequestHandler } from 'ask-sdk-core'
 import { IntentRequest } from 'ask-sdk-model'
@@ -88,12 +89,20 @@ async function IN_PROGRESS(handlerInput: HandlerInput) {
 
   const movieSlot = intent.slots?.movie.value || ''
   
-  if (!movieSlot || ['no', 'nah', 'nope', 'negative'].includes(movieSlot.toLowerCase())) {
+  if (!movieSlot || NO_INTENT.includes(movieSlot.toLowerCase())) {
     session.cursor = !movieSlot ? 0 : session.cursor + 1
 
     handlerInput.attributesManager.setSessionAttributes(session)
     return handlerInput.responseBuilder
       .speak(`Did you mean ${session.results[session.cursor].title} from ${session.results[session.cursor].year}?`)
+      .addElicitSlotDirective('movie')
+      .getResponse()
+  }
+
+  if (!YES_INTENT.includes(movieSlot.toLowerCase())) {
+    handlerInput.attributesManager.setSessionAttributes(session)
+    return handlerInput.responseBuilder
+      .speak(`Please answer yes or no. Did you mean ${session.results[session.cursor].title} from ${session.results[session.cursor].year}?`)
       .addElicitSlotDirective('movie')
       .getResponse()
   }

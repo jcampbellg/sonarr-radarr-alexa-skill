@@ -6,6 +6,10 @@ import fs from 'fs'
 const app = express()
 app.use(bodyParser.json())
 
+app.get('/', (_req, res) => {
+  res.send('Alexa skill is running')
+})
+
 app.post('/', async (req, res) => {
   try {
     // Log request to file

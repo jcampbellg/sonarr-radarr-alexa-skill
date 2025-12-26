@@ -1,36 +1,20 @@
 services:
-  arr-alexa-skill:
+  app:
     build: .
-    container_name: arr-alexa-skill
-    restart: always
+    container_name: node-alexa-skill:latest
     ports:
       - "4040:4040"
     environment:
-      - PORT=4040
-      - RADARR_APIKEY=your_radarr_api_key
-      - RADARR_SERVER=http://your_radarr_server:7878
-      - RADARR_ROOT=/movies
-      - SONARR_APIKEY=your_sonarr_api_key
-      - SONARR_SERVER=http://your_sonarr_server:8989
-      - SONARR_ROOT=/tvshows
-      # Optional: Set LOG=YES to enable request logging
-      # - LOG=YES
+      - NODE_ENV=production
     volumes:
-      # Persist logs if LOG=YES is enabled
-      - ./logs:/app/logs
+      - /logs:/app/logs
 
   ngrok:
     image: ngrok/ngrok:latest
-    container_name: arr-alexa-ngrok
-    restart: always
-    command:
-      - "start"
-      - "--all"
-      - "--config"
-      - "/etc/ngrok.yml"
-    environment:
-      - NGROK_AUTHTOKEN=your_ngrok_authtoken
-    volumes:
-      - ./ngrok.yml:/etc/ngrok.yml
+    container_name: ngrok
     depends_on:
-      - arr-alexa-skill
+      - app
+    command: >
+      http app:4040
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}

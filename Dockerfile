@@ -1,31 +1,24 @@
-# Use Node.js LTS version
-FROM node:20-alpine
+# ---- Build stage ----
+FROM node:20-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
+RUN npm ci
 
-# Install dependencies
-RUN npm ci --only=production && \
-    npm install pkgroll typescript
-
-# Copy source code and config files
-COPY tsconfig.json ./
-COPY src ./src
-
-# Build the project
+COPY . .
 RUN npm run build
 
-# Remove dev dependencies to keep image small
-RUN npm prune --production
+# ---- Runtime stage ----
+FROM node:20-alpine
 
-# Create logs directory for optional request logging
-RUN mkdir -p logs
+WORKDIR /app
 
-# Expose port 4040 (default port for the Alexa skill)
+COPY package*.json ./
+RUN npm ci --only=production
+
+COPY --from=builder /app/dist ./dist
+
 EXPOSE 4040
 
-# Start the application
 CMD ["npm", "start"]

@@ -1,13 +1,13 @@
 services:
   app:
     build: .
-    container_name: node-alexa-skill:latest
+    container_name: node-alexa-skill
     ports:
       - "4040:4040"
     environment:
       - NODE_ENV=production
     volumes:
-      - /logs:/app/logs
+      - path_in_computer/logs:/app/logs
 
   ngrok:
     image: ngrok/ngrok:latest
